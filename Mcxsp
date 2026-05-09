@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>MCXSP | Official Tier List</title>
+    <style>
+        :root {
+            --bg: #050505; --sidebar: #000; --card: #111;
+            --ht1: #ff3e3e; --lt1: #ff8e8e; --ht2: #ffa500; --lt2: #ffd747;
+            --ht3: #ffff00; --lt3: #ffffa5;
+        }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* القائمة الجانبية للأقسام الـ 8 */
+        aside { width: 250px; background: var(--sidebar); border-left: 1px solid #222; display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
+        .logo { font-size: 26px; font-weight: bold; margin-bottom: 30px; text-align: center; border-bottom: 2px solid var(--ht1); padding-bottom: 10px; }
+        .logo span { color: var(--ht1); }
+
+        .nav-link { display: flex; align-items: center; padding: 12px; color: #888; text-decoration: none; cursor: pointer; border-radius: 8px; margin-bottom: 5px; transition: 0.2s; }
+        .nav-link:hover, .nav-link.active { background: #1a1a1a; color: #fff; border-left: 4px solid var(--ht1); }
+        .nav-link b { font-size: 20px; margin-left: 12px; font-style: normal; }
+
+        /* المحتوى الرئيسي */
+        main { flex: 1; padding: 40px; overflow-y: auto; scroll-behavior: smooth; }
+        .header { display: flex; align-items: center; gap: 15px; font-size: 28px; margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 15px; }
+
+        .tier-card { margin-bottom: 10px; background: var(--card); border-radius: 6px; border-right: 6px solid; overflow: hidden; transition: 0.3s; }
+        .tier-label { padding: 6px 15px; font-weight: bold; background: #181818; display: flex; justify-content: space-between; font-size: 11px; color: #777; }
+        .player-row { padding: 12px 20px; display: flex; align-items: center; gap: 15px; }
+        
+        /* بديل السكن: دائرة الحرف الملونة (مستحيل تطلع شمس) */
+        .head-initial { 
+            width: 42px; height: 42px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: bold; font-size: 20px; color: white;
+            text-transform: uppercase; border: 2px solid;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        
+        .player-name { font-size: 17px; font-weight: 600; }
+        
+        .c-ht1 { border-color: var(--ht1); } .c-lt1 { border-color: var(--lt1); }
+        .c-ht2 { border-color: var(--ht2); } .c-lt2 { border-color: var(--lt2); }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div class="logo">MC<span>XSP</span></div>
+        <div id="menu"></div>
+    </aside>
+
+    <main id="main-content"></main>
+
+    <script>
+        const divisions = [
+            { id: 'mace', name: 'Mace', icon: '🔨' },
+            { id: 'pot', name: 'Pot', icon: '🧪' },
+            { id: 'sword', name: 'Sword', icon: '⚔️' },
+            { id: 'axe', name: 'Axe', icon: '🪓' },
+            { id: 'crystal', name: 'Crystal', icon: '🔮' },
+            { id: 'uhc', name: 'UHC', icon: '🍎' },
+            { id: 'vanilla', name: 'Vanilla', icon: '🛡️' },
+            { id: 'smp', name: 'SMP', icon: '🌲' }
+        ];
+
+        const realNames = ["xspleef", "itzrealme", "coldified", "vixon", "marlowww", "janekv", "swight", "aksuw", "riky", "straight", "dante", "doenut"];
+        const tiers = [
+            {l:'HT1', c:'c-ht1', color: '#ff3e3e'}, 
+            {l:'LT1', c:'c-lt1', color: '#ff8e8e'}, 
+            {l:'HT2', c:'c-ht2', color: '#ffa500'}, 
+            {l:'LT2', c:'c-lt2', color: '#ffd747'}
+        ];
+
+        function init() {
+            const menu = document.getElementById('menu');
+            divisions.forEach((div, index) => {
+                const link = document.createElement('div');
+                link.className = `nav-link ${index === 0 ? 'active' : ''}`;
+                link.innerHTML = `<b>${div.icon}</b> ${div.name}`;
+                link.onclick = () => loadDivision(div, link);
+                menu.appendChild(link);
+                if(index === 0) loadDivision(div, link);
+            });
+        }
+
+        function loadDivision(div, element) {
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            element.classList.add('active');
+
+            const container = document.getElementById('main-content');
+            let html = `<div class="header">${div.icon} ${div.name} Rankings (100)</div>`;
+
+            for (let i = 1; i <= 100; i++) {
+                const t = tiers[(i-1) % 4];
+                let pName = (i === 1 && div.id === 'mace') ? "xspleef" : realNames[i % realNames.length];
+                let initial = pName.charAt(0);
+
+                html += `
+                    <div class="tier-card ${t.c}">
+                        <div class="tier-label">RANK #${i} — ${t.l}</div>
+                        <div class="player-row">
+                            <div class="head-initial" style="background: ${t.color}22; border-color: ${t.color}; color: ${t.color}; text-shadow: 0 0 5px ${t.color}">
+                                ${initial}
+                            </div>
+                            <span class="player-name">${pName}</span>
+                        </div>
+                    </div>`;
+            }
+            container.innerHTML = html;
+            container.scrollTop = 0;
+        }
+        init();
+    </script>
+</body>
+</html>
+
